@@ -4,6 +4,7 @@ from detector import detect_sensitive_metadata
 from extractor import extract_docx_metadata, extract_image_metadata, extract_pdf_metadata
 from risk_analyzer import analyze_risk
 from reporter import generate_html_report
+from sanitizer import sanitize_docx, sanitize_image, sanitize_pdf
 
 
 SAMPLES_DIR = Path(__file__).resolve().parent / "samples"
@@ -56,8 +57,29 @@ def extract_by_type(file_path):
         raise ValueError("Unsupported file format.")
 
 
+def sanitize_and_check(file_path, original_risk):
+    extension = file_path.suffix.lower()
+    if extension in {".jpg", ".jpeg", ".png"}:
+        cleaned_path = sanitize_image(file_path)
+    elif extension == ".pdf":
+        cleaned_path = sanitize_pdf(file_path)
+    elif extension == ".docx":
+        cleaned_path = sanitize_docx(file_path)
+
+    cleaned_findings = detect_sensitive_metadata(extract_by_type(cleaned_path))
+    cleaned_risk = analyze_risk(cleaned_findings)
+
+    print("\n--- SANITIZATION RESULT ---")
+    print(f"Cleaned copy: {cleaned_path}")
+    print(f"Risk before: {original_risk['score']}/100")
+    print(f"Risk after: {cleaned_risk['score']}/100")
+    print(f"Remaining sensitive fields: {len(cleaned_findings)}")
+    for finding in cleaned_findings:
+        print(f" - {finding['field']}: {finding['category']}")
+
+
 def main():
-    print("MetaGuard v0.2")
+    print("MetaGuard v0.3")
     confirmation = input("Do you own or have permission to analyze these files? (yes/no): ")
     if confirmation.strip().lower() != "yes":
         print("Authorization not confirmed. Exiting.")
@@ -68,6 +90,12 @@ def main():
     findings = detect_sensitive_metadata(metadata)
     risk = analyze_risk(findings)
     print_scan(metadata, findings, risk)
+
+    if input("\nSanitize this file? (yes/no): ").strip().lower() == "yes":
+        try:
+            sanitize_and_check(file_path, risk)
+        except (OSError, ValueError) as error:
+            print(f"Sanitization failed: {error}")
 
     if input("\nGenerate HTML security report? (yes/no): ").strip().lower() == "yes":
         report_path = generate_html_report(metadata, findings, risk)
