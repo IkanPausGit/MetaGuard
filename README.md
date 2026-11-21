@@ -1,10 +1,11 @@
-# MetaGuard v0.3
+# MetaGuard v0.4
 
-## Metadata sanitization
+## File comparison
 
 - Detects predefined sensitive metadata fields in JPEG, PNG, PDF and DOCX files and shows an illustrative privacy risk score.
 - Generates a local HTML report with metadata, findings and recommendations.
 - Creates a cleaned copy and shows the privacy risk score before and after sanitization.
+- Compares metadata in two files of the same format and lists added, removed, changed and unchanged fields.
 
 ## Setup
 
@@ -21,6 +22,7 @@ python -m venv .venv
 .\.venv\Scripts\python.exe main.py
 ```
 
-Confirm authorization and enter `gps_test.jpg` at the file name prompt.
+Confirm authorization and enter `sample3.docx` at the file name prompt.
+To try the comparison, answer `yes` and enter `modified.docx`.
 To try sanitization, answer `yes` at the sanitization prompt. The cleaned copy goes to `output/`.
 To generate a report, answer `yes` at the report prompt and open the HTML file in `output/`.

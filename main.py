@@ -5,6 +5,7 @@ from extractor import extract_docx_metadata, extract_image_metadata, extract_pdf
 from risk_analyzer import analyze_risk
 from reporter import generate_html_report
 from sanitizer import sanitize_docx, sanitize_image, sanitize_pdf
+from comparator import compare_metadata
 
 
 SAMPLES_DIR = Path(__file__).resolve().parent / "samples"
@@ -78,8 +79,22 @@ def sanitize_and_check(file_path, original_risk):
         print(f" - {finding['field']}: {finding['category']}")
 
 
+def print_comparison(metadata, second_file):
+    comparison = compare_metadata(metadata, extract_by_type(second_file))
+    print("\n--- METADATA COMPARISON ---")
+    for category, entries in comparison.items():
+        print(f"\n{category.upper()} ({len(entries)}):")
+        for field, value in entries.items():
+            if category == "changed":
+                print(f" {field}:")
+                print(f"   Before: {value['before']}")
+                print(f"   After:  {value['after']}")
+            else:
+                print(f" {field}: {value}")
+
+
 def main():
-    print("MetaGuard v0.3")
+    print("MetaGuard v0.4")
     confirmation = input("Do you own or have permission to analyze these files? (yes/no): ")
     if confirmation.strip().lower() != "yes":
         print("Authorization not confirmed. Exiting.")
@@ -90,6 +105,13 @@ def main():
     findings = detect_sensitive_metadata(metadata)
     risk = analyze_risk(findings)
     print_scan(metadata, findings, risk)
+
+    if input("\nCompare with another file? (yes/no): ").strip().lower() == "yes":
+        try:
+            second_file = read_sample("Enter second file name: ")
+            print_comparison(metadata, second_file)
+        except (OSError, ValueError) as error:
+            print(f"Comparison error: {error}")
 
     if input("\nSanitize this file? (yes/no): ").strip().lower() == "yes":
         try:
