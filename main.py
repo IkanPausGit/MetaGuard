@@ -3,6 +3,7 @@ from pathlib import Path
 from detector import detect_sensitive_metadata
 from extractor import extract_docx_metadata, extract_image_metadata, extract_pdf_metadata
 from risk_analyzer import analyze_risk
+from reporter import generate_html_report
 
 
 SAMPLES_DIR = Path(__file__).resolve().parent / "samples"
@@ -56,7 +57,7 @@ def extract_by_type(file_path):
 
 
 def main():
-    print("MetaGuard v0.1")
+    print("MetaGuard v0.2")
     confirmation = input("Do you own or have permission to analyze these files? (yes/no): ")
     if confirmation.strip().lower() != "yes":
         print("Authorization not confirmed. Exiting.")
@@ -67,6 +68,10 @@ def main():
     findings = detect_sensitive_metadata(metadata)
     risk = analyze_risk(findings)
     print_scan(metadata, findings, risk)
+
+    if input("\nGenerate HTML security report? (yes/no): ").strip().lower() == "yes":
+        report_path = generate_html_report(metadata, findings, risk)
+        print(f"Report saved to: {report_path}")
 
     return 0
 

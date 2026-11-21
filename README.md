@@ -1,8 +1,9 @@
-# MetaGuard
+# MetaGuard v0.2
 
-## Detector
+## HTML reporting
 
 - Detects predefined sensitive metadata fields in JPEG, PNG, PDF and DOCX files and shows an illustrative privacy risk score.
+- Generates a local HTML report with metadata, findings and recommendations.
 
 ## Setup
 
@@ -20,3 +21,4 @@ python -m venv .venv
 ```
 
 Confirm authorization and enter `gps_test.jpg` at the file name prompt.
+To generate a report, answer `yes` at the report prompt and open the HTML file in `output/`.

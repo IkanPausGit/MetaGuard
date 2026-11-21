@@ -44,7 +44,7 @@ def extract_image_metadata(file_path):
 
             metadata["GPSInfo"] = str(gps_tags)
 
-            # Extract individual GPS fields
+            # Extract GPS fields
             for field in ["GPSLatitude", "GPSLongitude"]:
                 if field in gps_tags:
                     metadata[field] = str(gps_tags[field])

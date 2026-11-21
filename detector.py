@@ -27,7 +27,6 @@ def detect_sensitive_metadata(metadata):
         if field not in SENSITIVE_FIELDS:
             continue
 
-        # Ignore empty or missing metadata values
         if value is None:
             continue
 
