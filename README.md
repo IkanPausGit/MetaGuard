@@ -17,10 +17,26 @@ python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 ```
 
+## Entering Environment
+
+Each of the command below are listed in order for Command Prompt, PowerShell or macOS / Linux.
+
+```powershell
+.venv\Scripts\activate.bat
+```
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+```powershell
+source .venv/bin/activate
+```
+
 ## Try it
 
 ```powershell
-.\.venv\Scripts\python.exe main.py
+python main.py
 ```
 
 Confirm authorization and enter `sample3.docx` at the file name prompt.
@@ -31,11 +47,11 @@ To generate a report, answer `yes` at the report prompt and open the HTML file i
 ## Command-line examples
 
 ```powershell
-.\.venv\Scripts\python.exe main.py --help
-.\.venv\Scripts\python.exe main.py --scan samples/gps_test.jpg
-.\.venv\Scripts\python.exe main.py --scan samples/sample2.pdf --report
-.\.venv\Scripts\python.exe main.py --sanitize samples/gps_test.jpg
-.\.venv\Scripts\python.exe main.py --compare samples/sample3.docx samples/modified.docx
+python main.py --help
+python main.py --scan samples/gps_test.jpg
+python main.py --scan samples/sample2.pdf --report
+python main.py --sanitize samples/gps_test.jpg
+python main.py --compare samples/sample3.docx samples/modified.docx
 ```
 
 Commands that analyze files ask for authorization before running.
