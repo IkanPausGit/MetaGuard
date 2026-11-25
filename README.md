@@ -1,4 +1,4 @@
-# MetaGuard v0.5
+# MetaGuard
 
 ## Professional Command-Line Interface (CLI)
 
